@@ -23,6 +23,14 @@ create table if not exists salary_history (
   created_at timestamp with time zone default now()
 );
 
+create table if not exists expense_categories (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users not null,
+  label text not null,
+  monthly_amount int not null,
+  created_at timestamp with time zone default now()
+);
+
 alter table profiles enable row level security;
 alter table salary_history enable row level security;
 
@@ -30,6 +38,11 @@ create policy "Chacun gère son propre profil" on profiles
   for all using (auth.uid() = user_id);
 
 create policy "Chacun gère son propre historique" on salary_history
+  for all using (auth.uid() = user_id);
+
+alter table expense_categories enable row level security;
+
+create policy "Chacun gère ses propres dépenses" on expense_categories
   for all using (auth.uid() = user_id);
 
 -- Si tu as déjà exécuté ce fichier une première fois, ces lignes ajoutent

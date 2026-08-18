@@ -2,6 +2,12 @@
 
 Même méthode que Bouche à Oreille et Fidèle — si tu l'as déjà fait, ça ira vite.
 
+## Mode test (paiement désactivé)
+
+Par défaut, ce projet est configuré en **mode test** : `NEXT_PUBLIC_SKIP_PAYWALL=true` dans `.env.local.example`. Tant que c'est activé, n'importe qui qui crée un compte a accès à tout gratuitement, sans passer par Stripe — pratique pour vérifier que tout fonctionne bien avant de faire payer qui que ce soit.
+
+**Quand tu es prêt(e) à vraiment faire payer** : dans Vercel → Environment Variables, change `NEXT_PUBLIC_SKIP_PAYWALL` en `false` (ou supprime la variable), puis redéploie. Assure-toi d'avoir bien fait l'étape 6 (Stripe) avant, sinon personne ne pourra créer de compte payant.
+
 ## 1. Crée ton projet Supabase
 
 1. Va sur https://supabase.com, connecte-toi.
@@ -25,7 +31,11 @@ Même méthode que Bouche à Oreille et Fidèle — si tu l'as déjà fait, ça 
 
 1. Ouvre ton adresse Vercel.
 2. Crée un compte, configure ton profil (métier, expérience, zone).
-3. Regarde ta fourchette de référence, génère un script de négociation, ajoute une entrée à ton historique.
+3. Tu arrives sur **Vue d'ensemble**, avec une navigation à 4 onglets en haut :
+   - **Vue d'ensemble** — résumé rapide (fourchette, dernier salaire, dépenses, reste à vivre)
+   - **Finances** — renseigne tes dépenses fixes (loyer, transport...) et ton historique de salaire
+   - **Script** — ta fourchette de référence + génère ton script de négociation
+   - **Entraînement** — pratique les objections classiques
 
 ## Important à savoir
 
@@ -61,3 +71,11 @@ Le produit affiche des fourchettes indicatives (fichier `lib/benchmarks.js`), pa
 6. Ajoute toutes ces variables dans Vercel, redéploie.
 
 **Le parcours utilisateur** : la page d'accueil (`/`) est publique, avec les deux formules affichées. Un clic sur une formule envoie vers `/login?plan=lifetime` (ou `monthly`) → l'utilisateur crée son compte → redirigé automatiquement vers Stripe Checkout → après paiement, le webhook active son accès → il configure son profil métier → accès complet au tableau de bord.
+
+## 7. Active l'entraînement avec l'IA recruteur
+
+1. Crée un compte sur https://console.anthropic.com (facturation à l'usage, pas d'abonnement fixe).
+2. Génère une clé API (Settings → API Keys) → `ANTHROPIC_API_KEY`.
+3. Ajoute-la dans Vercel, redéploie.
+
+**Point financier important, à ne pas négliger** : contrairement à tout ce qu'on a construit avant (Supabase, Vercel, Resend ont des paliers gratuits confortables), chaque message échangé dans le mode entraînement a un **coût réel à l'usage**, facturé par Anthropic. Si tu as beaucoup d'utilisateurs actifs sur cette fonctionnalité, ce coût peut monter — à surveiller dans ton dashboard Anthropic, et à intégrer dans le calcul de rentabilité de tes 50€/mois ou 300€ à vie. Ce n'est pas bloquant pour démarrer, mais c'est la première brique du produit qui n'est pas quasi-gratuite à faire tourner.

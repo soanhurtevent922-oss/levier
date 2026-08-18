@@ -24,7 +24,8 @@ function LoginForm() {
   const [confirmMsg, setConfirmMsg] = useState('');
 
   async function goToCheckoutOrDashboard(session) {
-    if (plan) {
+    const skipPaywall = process.env.NEXT_PUBLIC_SKIP_PAYWALL === 'true';
+    if (plan && !skipPaywall) {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
