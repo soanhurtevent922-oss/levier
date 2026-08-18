@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useDashboard } from '../layout';
-import { getBenchmark } from '../../../lib/benchmarks';
+import { useDashboard } from './layout';
+import { getBenchmark } from '../../lib/benchmarks';
 
 export default function OverviewPage() {
   const { profile, history, expenses } = useDashboard();
@@ -32,31 +32,3 @@ export default function OverviewPage() {
           <span className={`val ${resteAVivre !== null && resteAVivre < 0 ? 'warn' : ''}`}>
             {resteAVivre !== null ? `${resteAVivre.toLocaleString('fr-FR')}€` : '—'}
           </span>
-          <span className="label">Estimation reste à vivre / mois</span>
-        </div>
-      </div>
-
-      {latestSalary && expenses.length > 0 && (
-        <p className="benchmark-note" style={{ marginBottom: '28px' }}>
-          Estimation basée sur ton dernier salaire brut annuel divisé par 12 — ce n&apos;est pas un vrai salaire net, juste un repère. Renseigne tes dépenses et ton salaire dans l&apos;onglet Finances pour affiner.
-        </p>
-      )}
-
-      <h2 className="section-title">Accès rapide</h2>
-      <div className="quick-links">
-        <Link href="/dashboard/finances" className="quick-link-card">
-          <span className="qlabel">Finances</span>
-          <p>Salaire, charges, dépenses et ton évolution dans le temps.</p>
-        </Link>
-        <Link href="/dashboard/script" className="quick-link-card">
-          <span className="qlabel">Script d&apos;entretien</span>
-          <p>Génère ton argumentaire personnalisé pour ta prochaine négociation.</p>
-        </Link>
-        <Link href="/dashboard/entrainement" className="quick-link-card">
-          <span className="qlabel">Entraînement</span>
-          <p>Prépare-toi aux objections classiques d&apos;un manager.</p>
-        </Link>
-      </div>
-    </div>
-  );
-}
